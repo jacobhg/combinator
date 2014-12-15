@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -308,24 +307,12 @@ public class CombinatorFiles {
         for (int i = 0; i < vcf_info.length; i++){
             // Controlamos que se añadan correctamente las etiquetas MistZone:
             if (vcf_info[i].startsWith("MistZone")){
-                //System.out.println(vcf_info[i]);
                 info_fields_map.put(vcf_info[i], vcf_info[i]);
             }
             // Para el resto de los campos:
             else{
-                //System.out.println(vcf_info[i]);
-                String[] vcf_sub_info = vcf_info[i].split("=");
-                // Controlamos para aquellos casos en los que AF tiene dos valores:
-                if (vcf_sub_info.length == 2){
-                    info_fields_map.put(vcf_sub_info[0], vcf_sub_info[1]);
-                }
-                // Para aquellos casos en los que AF tiene dos valores, concatenamos los valores para que queden ambos
-                // almacenados en el map y separados por coma ",".
-                else if (vcf_sub_info.length == 1){
-                    String af_value = info_fields_map.get("AF");
-                    af_value += "," + vcf_sub_info[0]; 
-                    info_fields_map.put("AF", af_value);
-                }
+                String[] vcf_sub_info = vcf_info[i].split("=");                
+                info_fields_map.put(vcf_sub_info[0], vcf_sub_info[1]);
             }
         }
         
@@ -336,18 +323,17 @@ public class CombinatorFiles {
                 // Comprobamos si existe un valor para ese campo y así evitamos insertar en el map campos que tengan 
                 // valores perdidos (los valores perdidos en el fichero VEP se representan por el símbolo "-"):
                 if (!(vep_fields[i].equals("-"))){
-                    info_fields_map.put(vep_fields_short_name[indexOfVepField(vep_headers[i])], vep_fields[i]);
+                    // Comprobamos si es un campo correspondiente a la frecuencia en la población:
+                    if (vep_headers[i].contains("MAF")){
+                        String[] freq = vep_fields[i].split(":");
+                        info_fields_map.put(vep_fields_short_name[indexOfVepField(vep_headers[i])], freq[1]);
+                    }
+                    else {
+                        info_fields_map.put(vep_fields_short_name[indexOfVepField(vep_headers[i])], vep_fields[i]);
+                    }    
                 }
             } 
         }
-        
-        // Recorrido del map:
-        /*System.out.println("Map con " + info_fields_map.size() + " elementos");
-        for( Iterator it = info_fields_map.keySet().iterator(); it.hasNext();) {
-            String clave = (String)it.next();
-            String valor = (String)info_fields_map.get(clave);
-            System.out.println(clave + " : " + valor);
-        }*/ 
     }
     
     /**
