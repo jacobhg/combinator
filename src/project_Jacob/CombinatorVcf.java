@@ -510,7 +510,7 @@ public class CombinatorVcf {
                     }
                     // Para el campo INFO, tendremos las cabeceras correspondientes a los subcampos MistZone, AF y DP:
                     else if (vcf_lines[0].startsWith("##INFO")){
-                        print_out.println("##INFO=<ID=MistZone,Type=String,Description=\"If present, indicates that the position is in an MIST Zone\">");
+                        print_out.println("##INFO=<ID=MistZone,Type=Flag,Description=\"If present, indicates that the position is in an MIST Zone\">");
                         print_out.println("##INFO=<ID=AF,Number=A,Type=Float,Description=\"Allele Frequency, for each ALT allele, in the same order as listed\">");
                         print_out.println("##INFO=<ID=DP,Number=1,Type=Integer,Description=\"Approximate read depth; some reads may have been filtered\">");
                         vcf_lines[0] = vcf_buffreader[0].readLine();
