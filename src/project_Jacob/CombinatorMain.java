@@ -19,7 +19,7 @@ public class CombinatorMain {
         //calcularMediaDP();
         //new CombinatorMist().start();
         //new CombinatorVcf().start(); 
-        new CombinatorFiles().start();
+        new CombinatorFilesVEP().start();
 
     }
         
