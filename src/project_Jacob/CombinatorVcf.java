@@ -37,7 +37,7 @@ public class CombinatorVcf {
     //----- Añadido el 21/10/2014:
     // Vector de string que representa los cromosomas y que nos servirá para buscar y comparar
     // posiciones cuando se recorran los ficheros:
-    public final String[] chromosomes = {
+    public static final String[] chromosomes = {
         "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
         "11", "12", "13", "14", "15", "16", "17", "18", "19", 
         "20", "21", "22", "X", "Y", "MT"};
@@ -313,7 +313,7 @@ public class CombinatorVcf {
      * @return : Nos devuelve la posición correspondiente en el vector de cromosomas del cromosoma que se le ha pasado como 
      *           parámetro de entrada. Si no lo encuentra nos devuelve "-1".
      */
-    public int posOfChrom(String chromosome) {
+    public static int posOfChrom(String chromosome) {
         for (int i = 0; i < chromosomes.length; i++) {
             if (chromosomes[i].equals(chromosome)) {
                 return i;
