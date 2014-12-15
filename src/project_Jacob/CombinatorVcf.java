@@ -452,23 +452,23 @@ public class CombinatorVcf {
                 // Si alguna de las líneas en el grupo de líneas coincidentes respecto a cromosoma (CHROM) y posición (POS) se encuentra
                 // en un zona MIST, añadimos la etiqueta "MistZone" al campo INFO:
                 if (isMistZone == true){
-                    new_info += "MistZone,";
+                    new_info += "MistZone:";
                 }
                 // Se recorren los subcampos del campo INFO para quedarnos con aquellos que son de interés:
                 for (int j = 0; j < info_fields.length; j++){
                     // Campo AF:
                     if(info_fields[j].startsWith("AF=")){
-                        new_info += (info_fields[j] + ",");
+                        new_info += (info_fields[j] + ":");
                     }
                     // Campo DP:
                     if(info_fields[j].startsWith("DP=")){
-                        new_info += (info_fields[j] + ",");
+                        new_info += (info_fields[j] + ":");
                     }
                 }
-                
+
                 // En un principio se desconoce si los subcampos del campo INFO pueden presentar un orden específico o estar desordenados, 
                 // por lo que se organizan para poder mantener el formato de los subcampos separados por punto y coma (;):
-                info_fields = new_info.split(",");
+                info_fields = new_info.split(":");
                 new_info = ("\t" + info_fields[0]);
                 for (int j = 1; j < info_fields.length; j++){
                     new_info += (";" + info_fields[j]);
