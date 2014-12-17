@@ -23,13 +23,13 @@ public class CombinatorSIFT {
     // Vector de string que representa los distintos campos que nos podemos encontrar en el fichero obtenido de SIFT:
     public final String [] sift_fields_long_name = {
         "Codons", "Ensembl Transcript ID", "RefSeq Transcript ID", "Known Transcript ID", "CCDS Transcript ID", "Ensembl Protein ID",
-        "RefSeq Protein ID", "Known Protein ID", "Substitution", "Region", "dbSNP ID", "SNP Type", "Prediction", "Score", "Median Info",
+        "RefSeq Protein ID", "Known Protein ID", "Substitution", "Region"/*, "dbSNP ID"*/, "SNP Type", "Prediction", "Score", "Median Info",
         "# Seqs at position"};
     
     // Vector que representa las siglas o el nombre corto que se ha establecido para los diferentes campos que podemos encontrarnos 
     // en el fichero obtenido de SIFT:
     public final String [] sift_fields_short_name = {
-        "COD", "ENt", "RFt", "KNt", "CCt", "ENp", "RFp", "KNp", "SUBS", "REG", "DBID", "SYN", "SIFTp", "SIFTs", "SIFTm", "SEQS"};
+        "COD", "ENt", "RFt", "KNt", "CCt", "ENp", "RFp", "KNp", "SUBS", "REG"/*, "DBID"*/, "SYN", "SIFTp", "SIFTs", "SIFTm", "SEQS"};
     
     // Vector en el que tenemos las líneas de cabecera correspondientes a los campos del fichero obtenido de SIFT y que se incluirán 
     // como líneas de cabecera en el fichero de salida:
@@ -44,7 +44,7 @@ public class CombinatorSIFT {
         "##INFO=<ID=KNp,Number=1,Type=String,Description=\"Known Protein ID\">",
         "##INFO=<ID=SUBS,Number=1,Type=String,Description=\"Amino acid substitution\">",
         "##INFO=<ID=REG,Number=1,Type=String,Description=\"SIFT region\">",
-        "##INFO=<ID=DBID,Number=1,Type=String,Description=\"dbSNP ID\">",
+        //"##INFO=<ID=DBID,Number=1,Type=String,Description=\"dbSNP ID\">",
         "##INFO=<ID=SYN,Number=1,Type=String,Description=\"SNP Type. Synonymous, nonsynonymous\">",
         "##INFO=<ID=SIFTp,Number=1,Type=String,Description=\"SIFT prediction\">",
         "##INFO=<ID=SIFTs,Number=1,Type=String,Description=\"SIFT score\">",
