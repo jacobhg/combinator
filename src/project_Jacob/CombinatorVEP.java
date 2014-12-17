@@ -118,8 +118,7 @@ public class CombinatorVEP {
         File output_file = new File("/home/uai02/Investigacion_Jacob/ficheros_vcf_mist/add_VEP_" + vcf_name);
         
         // Función que añade la información obtenida de VEP al fichero .vcf obtenido de CombinatorVcf:
-        addVepToVcf (vcf_file, vep_file, output_file);
-        
+        addVepToVcf (vcf_file, vep_file, output_file); 
     }
     
     /**
@@ -231,8 +230,7 @@ public class CombinatorVEP {
         // Se cierran los dos ficheros de entrada y el fichero de salida:
         vcf_br.close();
         vep_br.close();
-        output_wr.close();
-        
+        output_wr.close(); 
     }
     
     /**
@@ -269,7 +267,6 @@ public class CombinatorVEP {
             }
             break;
         }
-
     }    
     
     /**
