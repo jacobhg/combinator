@@ -112,7 +112,7 @@ public class CombinatorVEP {
         // la adición de la información de interés del anotador VEP como subcampos del campo INFO. El fichero también 
         // tendrá sus correspondientes líneas de cabecera:
         String vcf_name = vcf_file.getName();
-        File output_file = new File("/home/uai02/Investigacion_Jacob/ficheros_vcf_mist/add_VEP" + vcf_name);
+        File output_file = new File("/home/uai02/Investigacion_Jacob/ficheros_vcf_mist/add_VEP_" + vcf_name);
         
         // Función que añade la información obtenida de VEP al fichero .vcf obtenido de CombinatorVcf:
         addVepToVcf (vcf_file, vep_file, output_file); 
