@@ -75,7 +75,7 @@ public class CombinatorSIFT {
         // la adición de la información de interés del anotador SIFT como subcampos del campo INFO. El fichero también 
         // tendrá sus correspondientes líneas de cabecera:
         String vcf_name = vcf_file.getName();
-        File output_file = new File("/home/uai02/Investigacion_Jacob/ficheros_vcf_mist/add_SIFT" + vcf_name);
+        File output_file = new File("/home/uai02/Investigacion_Jacob/ficheros_vcf_mist/add_SIFT_" + vcf_name);
         
         // Función que añade la información obtenida de VEP al fichero .vcf obtenido de CombinatorVcf:
         addSiftToVcf (vcf_file, sift_file, output_file);
