@@ -27,8 +27,9 @@ public class CombinatorANNOVAR {
     // Vector que representa las siglas o el nombre corto que se ha establecido para los diferentes campos que podemos encontrarnos 
     // en el fichero obtenido de ANNOVAR:
     public final String [] annovar_fields_short_name = {
-        
-        };
+        "RGN", "GNAME", "DETAIL", "FUNC", "AACH", "C46W", "E6K", "1KG14", "SNP138", "SIFTs", "SIFTp", "PPD2s", "PPD2p", "PPV2s", 
+        "PPV2p", "LRTs", "LRTp", "MTs", "MTp", "MAs", "MAp", "FATs", "FATp", "RSs", "RSp", "LRs", "LRp", "VEs", "CAC", "CACp",
+        "GERP", "PHYp", "PHYv", "SIPHY", "GSD", "CLIN", "GWAS" };
     
     // Vector en el que tenemos las líneas de cabecera correspondientes a los campos del fichero obtenido de ANNOVAR y que se incluirán 
     // como líneas de cabecera en el fichero de salida:
@@ -99,7 +100,23 @@ public class CombinatorANNOVAR {
         File output_file = new File("/home/uai02/Investigacion_Jacob/ficheros_vcf_mist/add_SIFT_" + vcf_name);
         
         // Función que añade la información obtenida de ANNOVAR al fichero .vcf obtenido de CombinatorVcf:
-        //addAnnovarToVcf (vcf_file, sift_file, output_file);
+        addAnnovarToVcf (vcf_file, sift_file, output_file);
+        
+    }
+    
+    /**
+     * ----- Añadido el 18/12/2014 -----
+     * Función que se utiliza para generar un fichero de salida en el que se ha añadido la información de interés obtenida
+     * del anotador ANNOVAR al fichero .vcf que tenemos como resultado de CombinatorVcf.
+     * @param vcf_file : Fichero de entrada en formato .vcf obtenido de CombinatorVcf.
+     * @param annovar_file : Fichero de entrada con la información del anotador ANNOVAR. 
+     * @param output_file : Fichero de salida en el que aparecerá combinada la información de los ficheros de entrada.
+     * @throws IOException
+     * @throws FileNotFoundException 
+     */
+    private void addAnnovarToVcf(File vcf_file, File annovar_file, File output_file) throws IOException, FileNotFoundException{
+        
+        
         
     }
     
