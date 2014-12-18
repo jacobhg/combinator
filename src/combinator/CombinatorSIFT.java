@@ -146,7 +146,7 @@ public class CombinatorSIFT {
                         sift_line = sift_br.readLine();
                     }
                     // Caso 1.3: Si las posiciones (POS) coinciden, se combina la información de esas líneas (se añade al campo INFO del
-                    // fichero .vcf de salida: el campo INFO del fichero .vcf de entrada y los campos de interés de VEP).
+                    // fichero .vcf de salida: el campo INFO del fichero .vcf de entrada y los campos de interés de SIFT).
                     else{
                         // Se genera el map con los subcampos del campo INFO del fichero .vcf y los campos de interés del fichero SIFT:
                         generateSiftVcfMap (vcf_fields, sift_fields, sift_headers);
