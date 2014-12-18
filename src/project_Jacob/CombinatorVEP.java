@@ -277,7 +277,7 @@ public class CombinatorVEP {
      *                         de campos definidos en el vector "vep_fields_long_name".
      * @return : Devuelve la posición del vector en la que se encuentra el campo y si no lo ha encontrado devuelve -1.
      */
-    public int indexOfVepField (String vep_field_name) {
+    private int indexOfVepField (String vep_field_name) {
         for (int i = 0; i < vep_fields_long_name.length; i++) {
             if (vep_fields_long_name[i].equals(vep_field_name)) {
                 return i;
@@ -295,7 +295,7 @@ public class CombinatorVEP {
      * @param vep_fields : Campos obtenidos del fichero VEP.
      * @param vep_headers : Nombre de las cabeceras del fichero VEP.
      */
-    public void generateVepVcfMap (String[] vcf_fields, String[] vep_fields, String[] vep_headers){
+    private void generateVepVcfMap (String[] vcf_fields, String[] vep_fields, String[] vep_headers){
         // Nos quedamos con los subcampos del campo INFO (campo 8) de los campos pasados por parámetro del fichero .vcf:
         String[] vcf_info = vcf_fields[7].split(";");
                         
