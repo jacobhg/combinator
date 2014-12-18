@@ -121,7 +121,7 @@ public class CombinatorSIFT {
         while (vcf_line != null){
             // En un vector almacenamos los campos del fichero .vcf de la línea leída:
             String[] vcf_fields = vcf_line.split("\t");
-            // Recorrido del fichero de entrada VEP:
+            // Recorrido del fichero de entrada SIFT:
             while (sift_line != null){
                 // Almacenamos en un vector los campos del fichero SIFT de la línea leída:
                 String[] sift_fields = sift_line.split("\t");
