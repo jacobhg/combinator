@@ -41,5 +41,5 @@ public class CombinatorAnnotator {
         // Se devuelve la línea generada:
         return output_info_line;
     }  
-    
+          
 }
