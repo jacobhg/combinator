@@ -157,7 +157,7 @@ public class CombinatorSIFT {
                         for (int i = 1; i < 7; i++){
                             output_line += "\t" + vcf_fields[i];
                         }
-                        // Agregamos a la línea el nuevo campo INFO que contiene los campos del .vcf y del VEP:
+                        // Agregamos a la línea el nuevo campo INFO que contiene los campos del .vcf y del SIFT:
                         output_line += "\t" + CombinatorAnnotator.generateOutputInfoField ();
                         
                         // Se escribe la línea generada en el fichero de salida:
