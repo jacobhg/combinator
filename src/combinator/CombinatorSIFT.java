@@ -273,7 +273,7 @@ public class CombinatorSIFT {
         // Nos quedamos con los subcampos del campo INFO (campo 8) de los campos pasados por parámetro del fichero .vcf:
         String[] vcf_info = vcf_fields[7].split(";");
                         
-        // Map en el que tendremos almacenados los campos que necesitemos de los ficheros .vcf y VEP (los campos se 
+        // Map en el que tendremos almacenados los campos que necesitemos de los ficheros .vcf y SIFT (los campos se 
         // ordenarán alfabéticamente): 
         CombinatorAnnotator.info_fields_map = new TreeMap();
         
