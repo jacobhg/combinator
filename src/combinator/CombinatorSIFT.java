@@ -77,7 +77,7 @@ public class CombinatorSIFT {
         String vcf_name = vcf_file.getName();
         File output_file = new File("/home/uai02/Investigacion_Jacob/ficheros_vcf_mist/add_SIFT_" + vcf_name);
         
-        // Función que añade la información obtenida de VEP al fichero .vcf obtenido de CombinatorVcf:
+        // Función que añade la información obtenida de SIFT al fichero .vcf obtenido de CombinatorVcf:
         addSiftToVcf (vcf_file, sift_file, output_file);
         
     }
