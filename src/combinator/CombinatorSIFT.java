@@ -297,7 +297,7 @@ public class CombinatorSIFT {
             if (indexOfSiftField(sift_headers[i]) >= 0){
                 // Comprobamos si existe un valor para ese campo y así evitamos insertar en el map campos que tengan 
                 // valores perdidos (los valores perdidos en el fichero SIFT se representan por el símbolo "-" o " "):
-                if (!((sift_fields[i].equals("-")) || (sift_fields[i].equals(" ")))){
+                if (!((sift_fields[i].equals(" ")))){
                     CombinatorAnnotator.info_fields_map.put(sift_fields_short_name[indexOfSiftField(sift_headers[i])], sift_fields[i]); 
                 }
             } 
