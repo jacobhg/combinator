@@ -237,7 +237,7 @@ public class CombinatorVcf {
      * @throws IOException 
      * @throws FileNotFoundException
      */
-    public void initializeBufferedReader(File[] include, File[] exclude) throws IOException, FileNotFoundException {
+    private void initializeBufferedReader(File[] include, File[] exclude) throws IOException, FileNotFoundException {
         try{ 
             // Al vector de Buffered Reader le damos como tamaño el número de ficheros de entrada (número de ficheros include +
             // número de ficheros exclude):
@@ -282,7 +282,7 @@ public class CombinatorVcf {
      * @throws IOException 
      * @throws FileNotFoundException
      */
-    public void skipHeader (BufferedReader[] array_buffreader) throws IOException, FileNotFoundException {
+    private void skipHeader (BufferedReader[] array_buffreader) throws IOException, FileNotFoundException {
         try {
             // Se recorren todos los ficheros de entrada (include y exclude):
             for (int i = 0; i < array_buffreader.length; i++){
@@ -338,7 +338,7 @@ public class CombinatorVcf {
      *                        partir de la que se encuentran las líneas de los ficheros exclude.
      * @param print_out : Fichero de salida en el que se escribirán los resultados finales de las comparaciones.
      */
-    public void checkMatches (String[] matches, int start_exclude, PrintWriter print_out){   
+    private void checkMatches (String[] matches, int start_exclude, PrintWriter print_out){   
         // Variable auxiliar cuyo valor será verdadero (true) cuando exista una coincidencia respecto a cromosoma (CHROM) y 
         // posición (POS) entre el fichero de referencia (primer fichero del grupo include) y uno del grupo exclude:
         boolean flag_exclude = false;
@@ -437,7 +437,7 @@ public class CombinatorVcf {
      * @return : Devuelve una string que contiene la línea pasada como parámetro de entrada modificada para que contenga la información 
      *           de interés.
      */
-    public String createOutputLine (String vcf_line, boolean isMistZone){        
+    private String createOutputLine (String vcf_line, boolean isMistZone){        
         // Obtenemos los campos de la línea pasada por parámetro:
         String[] vcf_fields = vcf_lines[0].split("\t");
         
@@ -495,7 +495,7 @@ public class CombinatorVcf {
      * @throws IOException 
      * @throws FileNotFoundException
      */
-    public void generateOutputFileHeader (File[] include, File[] exclude, PrintWriter print_out) throws IOException, FileNotFoundException{
+    private void generateOutputFileHeader (File[] include, File[] exclude, PrintWriter print_out) throws IOException, FileNotFoundException{
         try {
             // Se recorre el fichero de referencia copiando en el fichero de salida las líneas de cabecera que nos interesen (en un fichero 
             // en formato .vcf, las líneas de cabecera empiezan por "#"):
