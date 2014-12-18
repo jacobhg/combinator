@@ -157,13 +157,13 @@ public class CombinatorSIFT {
                             output_line += "\t" + vcf_fields[i];
                         }
                         // Agregamos a la línea el nuevo campo INFO que contiene los campos del .vcf y del VEP:
-                        output_line += "\t" + CombinatorFiles.generateOutputInfoField ();
+                        output_line += "\t" + CombinatorAnnotator.generateOutputInfoField ();
                         
                         // Se escribe la línea generada en el fichero de salida:
                         print_out.println(output_line);
                         
                         // Vaciamos el map para utilizarlo en la siguiente iteración: 
-                        CombinatorFiles.info_fields_map.clear();
+                        CombinatorAnnotator.info_fields_map.clear();
                         
                         // Se lee la siguiente línea en el fichero VEP (se avanza a la siguiente posición (POS)):
                         sift_line = sift_br.readLine();
@@ -274,19 +274,19 @@ public class CombinatorSIFT {
                         
         // Map en el que tendremos almacenados los campos que necesitemos de los ficheros .vcf y VEP (los campos se 
         // ordenarán alfabéticamente): 
-        CombinatorFiles.info_fields_map = new TreeMap();
+        CombinatorAnnotator.info_fields_map = new TreeMap();
         
         // PASO 1: Almacenamos en el map los subcampos del campo INFO del fichero .vcf.
         for (int i = 0; i < vcf_info.length; i++){
             // Controlamos que se añadan correctamente las etiquetas MistZone, ya que es un campo que no es del tipo
             // "nombre_del_campo=valor":
             if (vcf_info[i].startsWith("MistZone")){
-                CombinatorFiles.info_fields_map.put(vcf_info[i], vcf_info[i]);
+                CombinatorAnnotator.info_fields_map.put(vcf_info[i], vcf_info[i]);
             }
             // Para el resto de los subcampos:
             else{
                 String[] vcf_sub_info = vcf_info[i].split("=");                
-                CombinatorFiles.info_fields_map.put(vcf_sub_info[0], vcf_sub_info[1]);
+                CombinatorAnnotator.info_fields_map.put(vcf_sub_info[0], vcf_sub_info[1]);
             }
         }
         
@@ -297,7 +297,7 @@ public class CombinatorSIFT {
                 // Comprobamos si existe un valor para ese campo y así evitamos insertar en el map campos que tengan 
                 // valores perdidos (los valores perdidos en el fichero SIFT se representan por el símbolo "-" o " "):
                 if (!((sift_fields[i].equals("-")) || (sift_fields[i].equals(" ")))){
-                    CombinatorFiles.info_fields_map.put(sift_fields_short_name[indexOfSiftField(sift_headers[i])], sift_fields[i]); 
+                    CombinatorAnnotator.info_fields_map.put(sift_fields_short_name[indexOfSiftField(sift_headers[i])], sift_fields[i]); 
                 }
             } 
         }   
