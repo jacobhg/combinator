@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -60,9 +59,6 @@ public class CombinatorSIFT {
     // Variable string que contendrá la línea que se vaya leyendo del fichero SIFT:
     public static String sift_line;
     
-    //----- Añadido el 12/12/2014 -----
-    // Map en el que se guardarán todos los campos que se van a añadir como subcampos al campo INFO del fichero .vcf de salida:
-    public static Map<String, String> info_fields_map;
     
     public CombinatorSIFT(){
         
@@ -78,7 +74,7 @@ public class CombinatorSIFT {
         // la adición de la información de interés del anotador SIFT como subcampos del campo INFO. El fichero también 
         // tendrá sus correspondientes líneas de cabecera:
         String vcf_name = vcf_file.getName();
-        File output_file = new File("/home/uai02/Investigacion_Jacob/ficheros_vcf_mist/add_SIFT_" + vcf_name);
+        File output_file = new File("/home/uai02/Investigacion_Jacob/ficheros_vcf_mist/add_SIFT" + vcf_name);
         
         // Función que añade la información obtenida de VEP al fichero .vcf obtenido de CombinatorVcf:
         addSiftToVcf (vcf_file, sift_file, output_file);
@@ -161,13 +157,13 @@ public class CombinatorSIFT {
                             output_line += "\t" + vcf_fields[i];
                         }
                         // Agregamos a la línea el nuevo campo INFO que contiene los campos del .vcf y del VEP:
-                        output_line += "\t" + generateOutputInfoField ();
+                        output_line += "\t" + CombinatorFiles.generateOutputInfoField ();
                         
                         // Se escribe la línea generada en el fichero de salida:
                         print_out.println(output_line);
                         
                         // Vaciamos el map para utilizarlo en la siguiente iteración: 
-                        info_fields_map.clear();
+                        CombinatorFiles.info_fields_map.clear();
                         
                         // Se lee la siguiente línea en el fichero VEP (se avanza a la siguiente posición (POS)):
                         sift_line = sift_br.readLine();
@@ -278,19 +274,19 @@ public class CombinatorSIFT {
                         
         // Map en el que tendremos almacenados los campos que necesitemos de los ficheros .vcf y VEP (los campos se 
         // ordenarán alfabéticamente): 
-        info_fields_map = new TreeMap();
+        CombinatorFiles.info_fields_map = new TreeMap();
         
         // PASO 1: Almacenamos en el map los subcampos del campo INFO del fichero .vcf.
         for (int i = 0; i < vcf_info.length; i++){
             // Controlamos que se añadan correctamente las etiquetas MistZone, ya que es un campo que no es del tipo
             // "nombre_del_campo=valor":
             if (vcf_info[i].startsWith("MistZone")){
-                info_fields_map.put(vcf_info[i], vcf_info[i]);
+                CombinatorFiles.info_fields_map.put(vcf_info[i], vcf_info[i]);
             }
             // Para el resto de los subcampos:
             else{
                 String[] vcf_sub_info = vcf_info[i].split("=");                
-                info_fields_map.put(vcf_sub_info[0], vcf_sub_info[1]);
+                CombinatorFiles.info_fields_map.put(vcf_sub_info[0], vcf_sub_info[1]);
             }
         }
         
@@ -301,38 +297,10 @@ public class CombinatorSIFT {
                 // Comprobamos si existe un valor para ese campo y así evitamos insertar en el map campos que tengan 
                 // valores perdidos (los valores perdidos en el fichero SIFT se representan por el símbolo "-" o " "):
                 if (!((sift_fields[i].equals("-")) || (sift_fields[i].equals(" ")))){
-                    info_fields_map.put(sift_fields_short_name[indexOfSiftField(sift_headers[i])], sift_fields[i]); 
+                    CombinatorFiles.info_fields_map.put(sift_fields_short_name[indexOfSiftField(sift_headers[i])], sift_fields[i]); 
                 }
             } 
         }   
-    }
-
-    /**
-     * ----- Añadido el 17/12/2014 -----
-     * Función que se utiliza para generar la línea INFO de salida con todos los campos que nos interesan de los ficheros 
-     * .vcf y SIFT. 
-     * @return : Devuelve la línea generada.
-     */
-    private String generateOutputInfoField() {
-        // Nueva línea de info que se escribirá en el fichero de salida:
-        String output_info_line = "";
-        
-        // Se genera la primera parte de la línea INFO de salida:
-        output_info_line += info_fields_map.keySet().toArray()[0].toString() + "=" + info_fields_map.values().toArray()[0].toString();
-        // Se genera el resto de la línea INFO de salida:
-        for (int i = 1; i < info_fields_map.size(); i++){
-            // Controlamos la etiqueta "MistZone" ya que es la única que no es del tipo: "Etiqueta=Valor":
-            if (info_fields_map.keySet().toArray()[i].toString().equals("MistZone")){
-                output_info_line += ";" + info_fields_map.values().toArray()[i].toString(); 
-            }
-            // Para los campos que no son la etiqueta "MistZone":
-            else {
-                output_info_line += ";" + info_fields_map.keySet().toArray()[i].toString() + "=" + info_fields_map.values().toArray()[i].toString();
-            }
-        }
-        
-        // Se devuelve la línea generada:
-        return output_info_line;
     }
        
 }
