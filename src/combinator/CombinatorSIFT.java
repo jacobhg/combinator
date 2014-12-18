@@ -214,7 +214,7 @@ public class CombinatorSIFT {
      * @param print_out
      * @throws IOException 
      */
-    private void generateOutputHeader(PrintWriter print_out) throws IOException {
+    private void generateOutputHeader (PrintWriter print_out) throws IOException {
         // Se recorre el fichero .vcf:
         while (vcf_line != null){
             // Leemos todas las líneas que son de cabecera (las que empiezan por "#"):
