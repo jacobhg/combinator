@@ -19,8 +19,9 @@ public class CombinatorMain {
         //calcularMediaDP();
         //new CombinatorMist().start();
         //new CombinatorVcf().start(); 
-        new CombinatorVEP().start();
-        new CombinatorSIFT().start();
+        //new CombinatorVEP().start();
+        //new CombinatorSIFT().start();
+        new CombinatorANNOVAR().start();
 
     }
         
