@@ -254,7 +254,7 @@ public class CombinatorSIFT {
      *                         de campos definidos en el vector "sift_fields_long_name".
      * @return : Devuelve la posición del vector en la que se encuentra el campo y si no lo ha encontrado devuelve -1.
      */
-    public int indexOfSiftField (String sift_field_name) {
+    private int indexOfSiftField (String sift_field_name) {
         for (int i = 0; i < sift_fields_long_name.length; i++) {
             if (sift_fields_long_name[i].equals(sift_field_name)) {
                 return i;
