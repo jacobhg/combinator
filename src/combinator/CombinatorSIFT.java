@@ -166,7 +166,7 @@ public class CombinatorSIFT {
                         // Vaciamos el map para utilizarlo en la siguiente iteración: 
                         CombinatorAnnotator.info_fields_map.clear();
                         
-                        // Se lee la siguiente línea en el fichero VEP (se avanza a la siguiente posición (POS)):
+                        // Se lee la siguiente línea en el fichero SIFT (se avanza a la siguiente posición (POS)):
                         sift_line = sift_br.readLine();
                         break;
                     }
