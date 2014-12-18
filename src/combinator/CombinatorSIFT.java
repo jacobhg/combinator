@@ -185,7 +185,7 @@ public class CombinatorSIFT {
                     // (se lee la siguiente línea del fichero SIFT).
                     else if (CombinatorVcf.posOfChrom(vcf_fields[0]) > CombinatorVcf.posOfChrom(sift_chrom_pos[0])){
                         // El fichero SIFT tiene una serie de líneas al final que vuelven a empezar desde el cromosoma 1. Ese grupo de 
-                        // líneas no los comprobaremos y seguiremos copiando las líneas del fichero .vcf de entrada:
+                        // líneas no las comprobaremos y seguiremos copiando las líneas del fichero .vcf de entrada:
                         if (CombinatorVcf.posOfChrom(vcf_fields[0]) - CombinatorVcf.posOfChrom(sift_chrom_pos[0]) > 2){
                             // Escribimos líneas del fichero .vcf que no coinciden con el fichero SIFT:
                             print_out.println(vcf_line);
