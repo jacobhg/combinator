@@ -165,7 +165,7 @@ public class CombinatorANNOVAR {
                 // Tratamieto de los campos de ANNOVAR para obtener los valores de los campos correctamente:
                 // Índice para acceder al vector "annovar_filter":
                 int annovar_filter_index = 0;
-                // vector donde tendremos los valores correctos para los campos obtenidos de ANNOVAR:
+                // Vector donde tendremos los valores correctos para los campos obtenidos de ANNOVAR:
                 String[] annovar_fields = new String[annovar_headers.length];
                 // Índice para acceder al vector "annovar_fields" donde tendremos los valores correctos para los campos obtenidos
                 // de ANNOVAR:
