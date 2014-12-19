@@ -154,33 +154,42 @@ public class CombinatorANNOVAR {
                 String[] annovar_filter = annovar_line.split(",");
                 
                 // Tratamieto de los campos de ANNOVAR para obtener los valores de los campos correctamente:
-                int k = 0;
+                // Índice para acceder al vector "annovar_filter":
                 int annovar_filter_index = 0;
-                String annovar_field_value = "";
+                // vector donde tendremos los valores correctos para los campos obtenidos de ANNOVAR:
                 String[] annovar_fields = new String[annovar_headers.length];
-                while (k < annovar_filter.length){
-                    
-                        if ((annovar_filter[k].startsWith("\"")) && (annovar_filter[k].endsWith("\""))){
-                            annovar_fields[annovar_filter_index] = annovar_filter[k];
+                // Índice para acceder al vector "annovar_fields" donde tendremos los valores correctos para los campos obtenidos
+                // de ANNOVAR:
+                int annovar_fields_index = 0;
+                // Recorremos el vector que contiene el filtrado que hemos hecho al fichero ANNOVAR:
+                while (annovar_filter_index < annovar_filter.length){
+                        // Si es un campo cuyo valor está entre comillas, se almacena en el vector de campos del fichero ANNOVAR:
+                        if ((annovar_filter[annovar_filter_index].startsWith("\"")) && (annovar_filter[annovar_filter_index].endsWith("\""))){
+                            annovar_fields[annovar_fields_index] = annovar_filter[annovar_filter_index];
+                            annovar_fields_index++;
                             annovar_filter_index++;
-                            k++;
                         }
-                        else if (!(annovar_filter[k].startsWith("\"")) && !(annovar_filter[k].endsWith("\""))){
-                            annovar_fields[annovar_filter_index] = annovar_filter[k];
+                        // Si es un campo cuyo valor no está entre comillas, se almacena en el vector de campos del fichero ANNOVAR:
+                        else if (!(annovar_filter[annovar_filter_index].startsWith("\"")) && !(annovar_filter[annovar_filter_index].endsWith("\""))){
+                            annovar_fields[annovar_fields_index] = annovar_filter[annovar_filter_index];
+                            annovar_fields_index++;
                             annovar_filter_index++;
-                            k++;
                         }
-                        else if ((annovar_filter[k].startsWith("\"")) && !(annovar_filter[k].endsWith("\""))){
-                            annovar_field_value += annovar_filter[k];
-                            k++;
-                            while (!(annovar_filter[k].endsWith("\""))){
-                                annovar_field_value += "," + annovar_filter[k];
-                                k++;
+                        // Si es un valor que empieza por comillas pero no acaba con este símbolo, significa que el valor se ha filtrado de forma
+                        // inadecuada y que faltan trozos correspndientes al valor de ese campo, por lo que se van concatenando los siguientes 
+                        // valores del vector "annovar_filter" hasta encontrar uno que acabe con comillas:
+                        else if ((annovar_filter[annovar_filter_index].startsWith("\"")) && !(annovar_filter[annovar_filter_index].endsWith("\""))){
+                            // Los valores se van concatenando en un string para posteriormente almacenarla en el vector de campos de ANNOVAR:
+                            String annovar_field_value = annovar_filter[annovar_filter_index];
+                            annovar_filter_index++;
+                            while (!(annovar_filter[annovar_filter_index].endsWith("\""))){
+                                annovar_field_value += "," + annovar_filter[annovar_filter_index];
+                                annovar_filter_index++;
                             }
-                            annovar_field_value += "," + annovar_filter[k];
-                            annovar_fields[annovar_filter_index] = annovar_field_value;
+                            annovar_field_value += "," + annovar_filter[annovar_filter_index];
+                            annovar_fields[annovar_fields_index] = annovar_field_value;
+                            annovar_fields_index++;
                             annovar_filter_index++;
-                            k++;
                         }
                 }
                 
