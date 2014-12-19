@@ -96,7 +96,6 @@ public class CombinatorANNOVAR {
     // Variable string que contendrá la línea que se vaya leyendo del fichero ANNOVAR:
     public static String annovar_line;
     
-    public int count = 0;
     
     public CombinatorANNOVAR(){
         
@@ -207,54 +206,16 @@ public class CombinatorANNOVAR {
                 // El cromosoma y la posición en el fichero ANNOVAR los tenemos en los dos primeros campos (Chr y Start).
                 // Caso 1: Si el cromosoma (CHROM) de ambos ficheros coincide, se comprobará la posición (POS) dentro del cromosoma.
                 if (CombinatorVcf.posOfChrom(vcf_fields[0]) == CombinatorVcf.posOfChrom(annovar_fields[0])){
-                    // Caso 1.1: Si la posición (POS) del fichero ANNOVAR es mayor que la del fichero .vcf, avanzamos una posición en el 
-                    // fichero .vcf (es decir, se lee la siguiente línea del fichero .vcf).
-                    /*if ((Integer.parseInt(annovar_fields[1])) > (Integer.parseInt(vcf_fields[1]))){ 
-                        // Escribimos líneas del fichero .vcf que no coinciden con el fichero ANNOVAR:
-                        print_out.println(vcf_line);
-                        
-                        break;
-                    }                  
-                    // Caso 1.2: Si la posición (POS) del fichero ANNOVAR es menor que la del fichero .vcf, avanzamos una posición en el 
-                    // fichero ANNOVAR (es decir, se lee la siguiente línea del fichero ANNOVAR).
-                    else if ((Integer.parseInt(annovar_fields[1])) < (Integer.parseInt(vcf_fields[1]))){                        
-                        annovar_line = annovar_br.readLine();
-                    }
-                    // Caso 1.3: Si las posiciones (POS) coinciden, se combina la información de esas líneas (se añade al campo INFO del
-                    // fichero .vcf de salida: el campo INFO del fichero .vcf de entrada y los campos de interés de ANNOVAR).
-                    else{
-                        // Se genera el map con los subcampos del campo INFO del fichero .vcf y los campos de interés del fichero ANNOVAR:
-                        generateAnnovarVcfMap (vcf_fields, annovar_fields, annovar_headers);
-                                                
-                        // Se genera la línea que se escribirá en el fichero de salida:
-                        String output_line = vcf_fields[0];
-                        // Agregamos los campos principales del fichero .vcf (todos menos INFO):
-                        for (int i = 1; i < 7; i++){
-                            output_line += "\t" + vcf_fields[i];
-                        }
-                        // Agregamos a la línea el nuevo campo INFO que contiene los campos del .vcf y del ANNOVAR:
-                        output_line += "\t" + CombinatorAnnotator.generateOutputInfoField ();
-                        
-                        // Se escribe la línea generada en el fichero de salida:
-                        print_out.println(output_line);
-                        count++;
-                        
-                        // Vaciamos el map para utilizarlo en la siguiente iteración: 
-                        CombinatorAnnotator.info_fields_map.clear();
-                        
-                        // Se lee la siguiente línea en el fichero ANNOVAR (se avanza a la siguiente posición (POS)):
-                        annovar_line = annovar_br.readLine();
-                        break;
-                    }
-                }*/
-                    // En el fichero ANNOVAR no aparecen exactamente algunas posiciones del fichero .vcf, por ejemplo, la posición "17303164"
-                    // del fichero .vcf aparece como "17303165" en el fichero de ANNOVAR. A continuación se arregla esa situación para quedarmos
-                    // con la información de ANNOVAR para todas las líneas del .vcf.
-                    // PRUEBA CASO 1:
+                    // Variables auxiliares en las que almacenamos la posición del .vcf y la posición del fichero ANNOVAR respectivamente:
                     int pos_vcf = Integer.parseInt(vcf_fields[1]);
                     int pos_annovar = Integer.parseInt(annovar_fields[1]);
-                
-                    if ((Math.abs(pos_vcf -pos_annovar) >= 0) && (Math.abs(pos_vcf -pos_annovar) <= 2)){
+                    // En el fichero ANNOVAR no aparecen exactamente algunas posiciones del fichero .vcf, por ejemplo, la posición "17303164" 
+                    // del fichero .vcf aparece como "17303165" en el fichero de ANNOVAR. A continuación se arregla esa situación para quedarmos 
+                    // con la información de ANNOVAR para todas las líneas del .vcf.
+                    // Caso 1.1: Si la diferencia entre las posiciones de ambos ficheros es 0, significa que las posiciones son iguales; y si la 
+                    // diferencia (en valor absoluto) entre ambas posiciones es menor o igual a 1 (y a su vez mayor que 0), nos encontramos en la 
+                    // situación explicada anteriormente: 
+                    if ((Math.abs(pos_vcf -pos_annovar) >= 0) && (Math.abs(pos_vcf -pos_annovar) <= 1)){
                         // Se genera el map con los subcampos del campo INFO del fichero .vcf y los campos de interés del fichero ANNOVAR:
                         generateAnnovarVcfMap (vcf_fields, annovar_fields, annovar_headers);
                                                 
@@ -269,7 +230,6 @@ public class CombinatorANNOVAR {
                         
                         // Se escribe la línea generada en el fichero de salida:
                         print_out.println(output_line);
-                        count++;
                         
                         // Vaciamos el map para utilizarlo en la siguiente iteración: 
                         CombinatorAnnotator.info_fields_map.clear();
@@ -278,16 +238,17 @@ public class CombinatorANNOVAR {
                         annovar_line = annovar_br.readLine();
                         break;
                     }
+                    // Caso 1.2: Si la posición (POS) del fichero ANNOVAR es menor que la del fichero .vcf, avanzamos una posición en el 
+                    // fichero ANNOVAR (es decir, se lee la siguiente línea del fichero ANNOVAR).
                     else if ((Integer.parseInt(annovar_fields[1])) < (Integer.parseInt(vcf_fields[1]))){
                         annovar_line = annovar_br.readLine();
                     }
+                    // Caso 1.3: Si la posición (POS) del fichero ANNOVAR es mayor que la del fichero .vcf, avanzamos una posición en el 
+                    // fichero .vcf (es decir, se lee la siguiente línea del fichero .vcf).
                     else if ((Integer.parseInt(annovar_fields[1])) > (Integer.parseInt(vcf_fields[1]))){
                         break;
                     }
-                }
-                // FIN PRUEBA CASO 1:
-                
-                
+                }                
                 // Caso 2: Si el cromosoma (CHROM) es diferente en ambos ficheros.
                 else{  
                     // Caso 2.1: Si el cromosoma (CHROM) del fichero .vcf es menor que el del fichero ANNOVAR, avanzamos en el fichero .vcf 
@@ -307,9 +268,7 @@ public class CombinatorANNOVAR {
             }
             vcf_line = vcf_br.readLine();
         }
-        
-        System.out.println(count);
-        
+                
         // Se cierran los dos ficheros de entrada y el fichero de salida:
         vcf_br.close();
         annovar_br.close();
