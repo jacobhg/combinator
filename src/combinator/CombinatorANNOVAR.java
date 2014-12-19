@@ -42,9 +42,12 @@ public class CombinatorANNOVAR {
         "##INFO=<ID=RGN,Number=1,Type=String,Description=\"exonic,splicing,ncRNA,UTR5,UTR3,intronic,upstream,downstream,intergenic\">",
         "##INFO=<ID=GNAME,Number=1,Type=String,Description=\"Gene symbol or name\">",
         "##INFO=<ID=DETAIL,Number=1,Type=String,Description=\"Distance to nearest genes\">",
+        "##INFO=<ID=DETAIL1,Number=1,Type=String,Description=\"Distance 1 to nearest genes\">",
+        "##INFO=<ID=DETAIL2,Number=1,Type=String,Description=\"Distance 2 to nearest genes\">",
         "##INFO=<ID=FUNC,Number=1,Type=String,Description=\"Exonic variant function\">",
         "##INFO=<ID=AACH,Number=1,Type=String,Description=\"Amino acid changes\">",
-        "##INFO=<ID=C46W,Number=1,Type=String,Description=\"phastConsElements46way\">",
+        "##INFO=<ID=C46Ws,Number=1,Type=String,Description=\"phastConsElements46way Score\">",
+        "##INFO=<ID=C46Wn,Number=1,Type=String,Description=\"phastConsElements46way Name\">",
         "##INFO=<ID=E6K,Number=1,Type=String,Description=\"esp6500si_all\">",
         "##INFO=<ID=1KG14,Number=1,Type=String,Description=\"1000g2014oct_all\">",
         "##INFO=<ID=SNP138,Number=1,Type=String,Description=\"snp138\">", 
@@ -73,8 +76,14 @@ public class CombinatorANNOVAR {
         "##INFO=<ID=PHYp,Number=1,Type=String,Description=\"phyloP46way_placental\">",
         "##INFO=<ID=PHYv,Number=1,Type=String,Description=\"phyloP100way_vertebrate\">",
         "##INFO=<ID=SIPHY,Number=1,Type=String,Description=\"SiPhy_29way_logOdds\">",
-        "##INFO=<ID=GSD,Number=1,Type=String,Description=\"genomicSuperDups\">",
-        "##INFO=<ID=CLIN,Number=1,Type=String,Description=\"clinvar_20140929\">",
+        "##INFO=<ID=GSDs,Number=1,Type=String,Description=\"genomicSuperDups Score\">",
+        "##INFO=<ID=GSDn,Number=1,Type=String,Description=\"genomicSuperDups Name\">",
+        "##INFO=<ID=CLINSIG,Number=1,Type=String,Description=\"clinvar_20140929 Annotation\">",
+        "##INFO=<ID=CLNDBN,Number=1,Type=String,Description=\"clinvar_20140929 Annotation\">",
+        "##INFO=<ID=CLNREVSTAT,Number=1,Type=String,Description=\"clinvar_20140929 Annotation\">",
+        "##INFO=<ID=CLNACC,Number=1,Type=String,Description=\"clinvar_20140929 Annotation\">",
+        "##INFO=<ID=CLNDSDB,Number=1,Type=String,Description=\"clinvar_20140929 Annotation\">",
+        "##INFO=<ID=CLNDSDBID,Number=1,Type=String,Description=\"clinvar_20140929 Annotation\">",
         "##INFO=<ID=GWAS,Number=1,Type=String,Description=\"gwasCatalog\">" };
     
     // Buffered Reader para el fichero de entrada (en formato .vcf) obtenido de CombinatorVcf:
@@ -87,6 +96,7 @@ public class CombinatorANNOVAR {
     // Variable string que contendrá la línea que se vaya leyendo del fichero ANNOVAR:
     public static String annovar_line;
     
+    public int count = 0;
     
     public CombinatorANNOVAR(){
         
@@ -199,7 +209,10 @@ public class CombinatorANNOVAR {
                 if (CombinatorVcf.posOfChrom(vcf_fields[0]) == CombinatorVcf.posOfChrom(annovar_fields[0])){
                     // Caso 1.1: Si la posición (POS) del fichero ANNOVAR es mayor que la del fichero .vcf, avanzamos una posición en el 
                     // fichero .vcf (es decir, se lee la siguiente línea del fichero .vcf).
-                    if ((Integer.parseInt(annovar_fields[1])) > (Integer.parseInt(vcf_fields[1]))){  
+                    if ((Integer.parseInt(annovar_fields[1])) > (Integer.parseInt(vcf_fields[1]))){ 
+                        // Escribimos líneas del fichero .vcf que no coinciden con el fichero ANNOVAR:
+                        print_out.println(vcf_line);
+                        
                         break;
                     }                  
                     // Caso 1.2: Si la posición (POS) del fichero ANNOVAR es menor que la del fichero .vcf, avanzamos una posición en el 
@@ -224,6 +237,7 @@ public class CombinatorANNOVAR {
                         
                         // Se escribe la línea generada en el fichero de salida:
                         print_out.println(output_line);
+                        count++;
                         
                         // Vaciamos el map para utilizarlo en la siguiente iteración: 
                         CombinatorAnnotator.info_fields_map.clear();
@@ -238,6 +252,9 @@ public class CombinatorANNOVAR {
                     // Caso 2.1: Si el cromosoma (CHROM) del fichero .vcf es menor que el del fichero ANNOVAR, avanzamos en el fichero .vcf 
                     // (se lee la siguiente línea del fichero .vcf).
                     if (CombinatorVcf.posOfChrom(vcf_fields[0]) < CombinatorVcf.posOfChrom(annovar_fields[0])){
+                        // Escribimos líneas del fichero .vcf que no coinciden con el fichero ANNOVAR:
+                        print_out.println(vcf_line);
+                        
                         break;
                     }
                     // Caso 2.2: Si el cromosoma (CHROM) del fichero .vcf es mayor que el del fichero ANNOVAR, avanzamos en el fichero ANNOVAR 
@@ -249,6 +266,8 @@ public class CombinatorANNOVAR {
             }
             vcf_line = vcf_br.readLine();
         }
+        
+        System.out.println(count);
         
         // Se cierran los dos ficheros de entrada y el fichero de salida:
         vcf_br.close();
@@ -275,20 +294,17 @@ public class CombinatorANNOVAR {
                     vcf_line = vcf_br.readLine();
                     while (vcf_line.startsWith("##INFO")){
                         print_out.println(vcf_line);
-                        print_out.flush();
                         vcf_line = vcf_br.readLine();
                     }
                     // Añadimos debajo de las líneas de cabecera del campo INFO obtenidas del .vcf, las líneas de cabecera 
                     // del campo INFO para la información de ANNOVAR:
                     for (int i = 0; i < annovar_header_lines.length; i++){
                         print_out.println(annovar_header_lines[i]);
-                        print_out.flush();
                     }
                 }
                 // Copiamos el resto de líneas de cabecera del fichero .vcf de entrada:
                 else {
                     print_out.println(vcf_line);
-                    print_out.flush();
                     vcf_line = vcf_br.readLine();
                 }
             }
@@ -319,10 +335,10 @@ public class CombinatorANNOVAR {
      * ANNOVAR, donde la clave del map será el acrónimo o nombre corto que representa el campo y el valor será el valor del 
      * propio campo.
      * @param vcf_fields : Campos obtenidos del fichero .vcf de entrada.
-     * @param annovar_filter : Campos obtenidos del fichero ANNOVAR.
+     * @param annovar_fields : Campos obtenidos del fichero ANNOVAR.
      * @param annovar_headers : Nombre de las cabeceras del fichero ANNOVAR.
      */
-    private void generateAnnovarVcfMap(String[] vcf_fields, String[] annovar_filter, String[] annovar_headers) {
+    private void generateAnnovarVcfMap(String[] vcf_fields, String[] annovar_fields, String[] annovar_headers) {
         // Nos quedamos con los subcampos del campo INFO (campo 8) de los campos pasados por parámetro del fichero .vcf:
         String[] vcf_info = vcf_fields[7].split(";");
                         
@@ -350,13 +366,51 @@ public class CombinatorANNOVAR {
             if (indexOfAnnovarField(annovar_headers[i]) >= 0){
                 // Comprobamos si existe un valor para ese campo y así evitamos insertar en el map campos que tengan 
                 // valores perdidos (los valores perdidos en el fichero ANNOVAR se representan por el símbolo "-" o " "):
-                if (!((annovar_filter[i].equals("")) || (annovar_filter[i].equals(".")) || (annovar_filter[i].equals("\"\"")))){
-                    if (annovar_filter[i].startsWith("\"")){
-                        String annovar_value = annovar_filter[i].substring(1, (annovar_filter[i].length() -1));
-                        CombinatorAnnotator.info_fields_map.put(annovar_filter_short_name[indexOfAnnovarField(annovar_headers[i])], annovar_value);
+                if (!((annovar_fields[i].equals("")) || (annovar_fields[i].equals(".")) || (annovar_fields[i].equals("\"\"")))){
+                    if (annovar_fields[i].startsWith("\"")){
+                        String annovar_value = annovar_fields[i].substring(1, (annovar_fields[i].length() -1));
+                        // Filtro concreto para el campo "GeneDetail.refgene":
+                        if ((annovar_headers[i].equals("GeneDetail.refgene")) && (annovar_value.startsWith("dist"))){
+                            String[] details = annovar_value.split(";");
+                            for (int j = 0; j < details.length; j++){
+                                CombinatorAnnotator.info_fields_map.put("DETAILS" + (j+1), details[j].split("=")[1]);
+                            }
+                        }
+                        // Filtro concreto para el campo "phastConsElements46way":
+                        else if (annovar_headers[i].equals("phastConsElements46way")){
+                            String[] phastCons = annovar_value.split(";");
+                            CombinatorAnnotator.info_fields_map.put("C46Ws", phastCons[0].split("=")[1]);
+                            CombinatorAnnotator.info_fields_map.put("C46Wn", phastCons[1].split("=")[1] + ":" + phastCons[1].split("=")[2]);
+                        }
+                        // Filtro concreto para el campo "genomicSuperDups":
+                        else if (annovar_headers[i].equals("genomicSuperDups")){
+                            String[] genomicSuperDups = annovar_value.split(";");
+                            CombinatorAnnotator.info_fields_map.put("GSDs", genomicSuperDups[0].split("=")[1]);
+                            CombinatorAnnotator.info_fields_map.put("GSDn", genomicSuperDups[1].split("=")[1]);
+                        }
+                        // Filtro concreto para "clinvar_20140929":
+                        else if (annovar_headers[i].equals("clinvar_20140929")){
+                            String[] clinvar = annovar_value.split(";");
+                            for (int j = 0; j < clinvar.length; j++){
+                                // Descartamos los subcampos con valores perdidos, que son aquellos cuyo valor es ".":
+                                if (!clinvar[j].split("=")[1].equals(".")){
+                                    CombinatorAnnotator.info_fields_map.put(clinvar[j].split("=")[0], clinvar[j].split("=")[1]);
+                                }
+                            }
+                        }
+                        // Filtro concreto para "gwasCatalog":
+                        else if (annovar_headers[i].equals("gwasCatalog")){
+                            String[] gwas = annovar_value.split("=");
+                            CombinatorAnnotator.info_fields_map.put(annovar_filter_short_name[indexOfAnnovarField(annovar_headers[i])], gwas[1]);
+                        }
+                        // Para el resto de campos cuyos valores empiecen por comillas:
+                        else {
+                            CombinatorAnnotator.info_fields_map.put(annovar_filter_short_name[indexOfAnnovarField(annovar_headers[i])], annovar_value);
+                        }
                     }
+                    // Para los campos cuyos valores no empiecen por comillas:
                     else{
-                        CombinatorAnnotator.info_fields_map.put(annovar_filter_short_name[indexOfAnnovarField(annovar_headers[i])], annovar_filter[i]);
+                        CombinatorAnnotator.info_fields_map.put(annovar_filter_short_name[indexOfAnnovarField(annovar_headers[i])], annovar_fields[i]);
                     }
                 }
             } 
