@@ -21,7 +21,7 @@ import utilities.CombinatorAnnotator;
  */
 public class CombinatorANNOVAR {
     // Vector de string que representa los distintos campos que nos podemos encontrar en el fichero obtenido de ANNOVAR:
-    public final String [] annovar_fields_long_name = {
+    public final String [] annovar_filter_long_name = {
         "Func.refgene", "Gene.refgene", "GeneDetail.refgene", "ExonicFunc.refgene", "AAChange.refgene", "phastConsElements46way",
         "esp6500si_all", "1000g2014oct_all", "snp138", "SIFT_score", "SIFT_pred", "Polyphen2_HDIV_score", "Polyphen2_HDIV_pred",
         "Polyphen2_HVAR_score", "Polyphen2_HVAR_pred", "LRT_score", "LRT_pred", "MutationTaster_score", "MutationTaster_pred",
@@ -31,7 +31,7 @@ public class CombinatorANNOVAR {
     
     // Vector que representa las siglas o el nombre corto que se ha establecido para los diferentes campos que podemos encontrarnos 
     // en el fichero obtenido de ANNOVAR:
-    public final String [] annovar_fields_short_name = {
+    public final String [] annovar_filter_short_name = {
         "RGN", "GNAME", "DETAIL", "FUNC", "AACH", "C46W", "E6K", "1KG14", "SNP138", "SIFTs", "SIFTp", "PPD2s", "PPD2p", "PPV2s", 
         "PPV2p", "LRTs", "LRTp", "MTs", "MTp", "MAs", "MAp", "FATs", "FATp", "RSs", "RSp", "LRs", "LRp", "VEs", "CAC", "CACp",
         "GERP", "PHYp", "PHYv", "SIPHY", "GSD", "CLIN", "GWAS" };
@@ -148,8 +148,42 @@ public class CombinatorANNOVAR {
             String[] vcf_fields = vcf_line.split("\t");
             // Recorrido del fichero de entrada ANNOVAR:
             while (annovar_line != null){
-                // Almacenamos en un vector los campos del fichero ANNOVAR de la línea leída:
-                String[] annovar_fields = annovar_line.split(",");
+                // Filtramos la línea leída por comas",", ya que en un principio es el símbolo que separa los campos. Pero hemos
+                // de tener en cuenta que hay subcampos de ANNOVAR que también están separados por coma ",", por lo que deberemos
+                // hacer un tratamiento del vector "annovar_filter" para obtener los campos correctamente:
+                String[] annovar_filter = annovar_line.split(",");
+                
+                // Tratamieto de los campos de ANNOVAR para obtener los valores de los campos correctamente:
+                int k = 0;
+                int annovar_filter_index = 0;
+                String annovar_field_value = "";
+                String[] annovar_fields = new String[annovar_headers.length];
+                while (k < annovar_filter.length){
+                    
+                        if ((annovar_filter[k].startsWith("\"")) && (annovar_filter[k].endsWith("\""))){
+                            annovar_fields[annovar_filter_index] = annovar_filter[k];
+                            annovar_filter_index++;
+                            k++;
+                        }
+                        else if (!(annovar_filter[k].startsWith("\"")) && !(annovar_filter[k].endsWith("\""))){
+                            annovar_fields[annovar_filter_index] = annovar_filter[k];
+                            annovar_filter_index++;
+                            k++;
+                        }
+                        else if ((annovar_filter[k].startsWith("\"")) && !(annovar_filter[k].endsWith("\""))){
+                            annovar_field_value += annovar_filter[k];
+                            k++;
+                            while (!(annovar_filter[k].endsWith("\""))){
+                                annovar_field_value += "," + annovar_filter[k];
+                                k++;
+                            }
+                            annovar_field_value += "," + annovar_filter[k];
+                            annovar_fields[annovar_filter_index] = annovar_field_value;
+                            annovar_filter_index++;
+                            k++;
+                        }
+                }
+                
                 // Comprobar que el cromosoma y la posición de .vcf y ANNOVAR sean los mismos:
                 // El cromosoma y la posición en el fichero ANNOVAR los tenemos en los dos primeros campos (Chr y Start).
                 // Caso 1: Si el cromosoma (CHROM) de ambos ficheros coincide, se comprobará la posición (POS) dentro del cromosoma.
@@ -258,12 +292,12 @@ public class CombinatorANNOVAR {
      * Función que nos indica la posición de un campo del fichero ANNOVAR en el vector de string que representa los campos que 
      * nos interesan de este tipo de ficheros.
      * @param annovar_field_name : Nombre del campo del fichero ANNOVAR que queremos comprobar si se encuentra en el listado
-     *                             de campos definidos en el vector "annovar_fields_long_name".
+     *                             de campos definidos en el vector "annovar_filter_long_name".
      * @return : Devuelve la posición del vector en la que se encuentra el campo y si no lo ha encontrado devuelve -1.
      */
     private int indexOfAnnovarField (String annovar_field_name) {
-        for (int i = 0; i < annovar_fields_long_name.length; i++) {
-            if (annovar_fields_long_name[i].equals(annovar_field_name)) {
+        for (int i = 0; i < annovar_filter_long_name.length; i++) {
+            if (annovar_filter_long_name[i].equals(annovar_field_name)) {
                 return i;
             }
         }
@@ -276,10 +310,10 @@ public class CombinatorANNOVAR {
      * ANNOVAR, donde la clave del map será el acrónimo o nombre corto que representa el campo y el valor será el valor del 
      * propio campo.
      * @param vcf_fields : Campos obtenidos del fichero .vcf de entrada.
-     * @param annovar_fields : Campos obtenidos del fichero ANNOVAR.
+     * @param annovar_filter : Campos obtenidos del fichero ANNOVAR.
      * @param annovar_headers : Nombre de las cabeceras del fichero ANNOVAR.
      */
-    private void generateAnnovarVcfMap(String[] vcf_fields, String[] annovar_fields, String[] annovar_headers) {
+    private void generateAnnovarVcfMap(String[] vcf_fields, String[] annovar_filter, String[] annovar_headers) {
         // Nos quedamos con los subcampos del campo INFO (campo 8) de los campos pasados por parámetro del fichero .vcf:
         String[] vcf_info = vcf_fields[7].split(";");
                         
@@ -307,8 +341,14 @@ public class CombinatorANNOVAR {
             if (indexOfAnnovarField(annovar_headers[i]) >= 0){
                 // Comprobamos si existe un valor para ese campo y así evitamos insertar en el map campos que tengan 
                 // valores perdidos (los valores perdidos en el fichero ANNOVAR se representan por el símbolo "-" o " "):
-                if (!((annovar_fields[i].equals("")) || (annovar_fields[i].equals(".")) || (annovar_fields[i].equals("\"\"")))){
-                    CombinatorAnnotator.info_fields_map.put(annovar_fields_short_name[indexOfAnnovarField(annovar_headers[i])], annovar_fields[i]); 
+                if (!((annovar_filter[i].equals("")) || (annovar_filter[i].equals(".")) || (annovar_filter[i].equals("\"\"")))){
+                    if (annovar_filter[i].startsWith("\"")){
+                        String annovar_value = annovar_filter[i].substring(1, (annovar_filter[i].length() -1));
+                        CombinatorAnnotator.info_fields_map.put(annovar_filter_short_name[indexOfAnnovarField(annovar_headers[i])], annovar_value);
+                    }
+                    else{
+                        CombinatorAnnotator.info_fields_map.put(annovar_filter_short_name[indexOfAnnovarField(annovar_headers[i])], annovar_filter[i]);
+                    }
                 }
             } 
         }   
