@@ -247,6 +247,9 @@ public class CombinatorANNOVAR {
                         break;
                     }
                 }*/
+                    // En el fichero ANNOVAR no aparecen exactamente algunas posiciones del fichero .vcf, por ejemplo, la posición "17303164"
+                    // del fichero .vcf aparece como "17303165" en el fichero de ANNOVAR. A continuación se arregla esa situación para quedarmos
+                    // con la información de ANNOVAR para todas las líneas del .vcf.
                     // PRUEBA CASO 1:
                     int pos_vcf = Integer.parseInt(vcf_fields[1]);
                     int pos_annovar = Integer.parseInt(annovar_fields[1]);
