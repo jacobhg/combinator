@@ -309,7 +309,7 @@ public class CombinatorVEP {
             }
             // Para el resto de los subcampos:
             else{
-                String[] vcf_sub_info = vcf_info[i].split("=");                
+                String[] vcf_sub_info = vcf_info[i].split("=");
                 CombinatorAnnotator.info_fields_map.put(vcf_sub_info[0], vcf_sub_info[1]);
             }
         }
