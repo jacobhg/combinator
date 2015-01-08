@@ -370,10 +370,26 @@ public class CombinatorANNOVAR {
                     if (annovar_fields[i].startsWith("\"")){
                         String annovar_value = annovar_fields[i].substring(1, (annovar_fields[i].length() -1));
                         // Filtro concreto para el campo "GeneDetail.refgene":
-                        if ((annovar_headers[i].equals("GeneDetail.refgene")) && (annovar_value.startsWith("dist"))){
-                            String[] details = annovar_value.split(";");
-                            for (int j = 0; j < details.length; j++){
-                                CombinatorAnnotator.info_fields_map.put("DETAILS" + (j+1), details[j].split("=")[1]);
+                        if (annovar_headers[i].equals("GeneDetail.refgene")){
+                            if (annovar_value.startsWith("dist")){
+                                String[] details = annovar_value.split(";");
+                                for (int j = 0; j < details.length; j++){
+                                    CombinatorAnnotator.info_fields_map.put("DETAILS" + (j+1), details[j].split("=")[1]);
+                                }
+                            }
+                            // Añadido el 8/1/2015: 
+                            else {
+                                String[] gene_detail = annovar_value.split(";");
+                                if (gene_detail.length == 1){
+                                    CombinatorAnnotator.info_fields_map.put("DETAIL", gene_detail[0]);
+                                }
+                                else{
+                                    String genedetail_value = gene_detail [0];
+                                    for (int j = 1; j < gene_detail.length; j++){
+                                        genedetail_value += "," + gene_detail [j];
+                                    }
+                                    CombinatorAnnotator.info_fields_map.put("DETAIL", genedetail_value);
+                                } 
                             }
                         }
                         // Filtro concreto para el campo "phastConsElements46way":
@@ -402,6 +418,35 @@ public class CombinatorANNOVAR {
                         else if (annovar_headers[i].equals("gwasCatalog")){
                             String[] gwas = annovar_value.split("=");
                             CombinatorAnnotator.info_fields_map.put(annovar_filter_short_name[indexOfAnnovarField(annovar_headers[i])], gwas[1]);
+                        }
+                        // Añadido el 8/1/2015:
+                        // Filtro concreto para "Func.refgene":
+                        else if (annovar_headers[i].equals("Func.refgene")){
+                            String[] refgene = annovar_value.split(";");
+                            if (refgene.length == 1){
+                                CombinatorAnnotator.info_fields_map.put("RGN", refgene[0]);
+                            }
+                            else{
+                                String refgene_value = refgene [0];
+                                for (int j = 1; j < refgene.length; j++){
+                                    refgene_value += "," + refgene [j];
+                                }
+                                CombinatorAnnotator.info_fields_map.put("RGN", refgene_value);
+                            }
+                        }
+                        // Filtro concreto para "Gene.refgene":
+                        else if (annovar_headers[i].equals("Gene.refgene")){
+                            String[] generef = annovar_value.split(";");
+                            if (generef.length == 1){
+                                CombinatorAnnotator.info_fields_map.put("GNAME", generef[0]);
+                            }
+                            else{
+                                String generef_value = generef [0];
+                                for (int j = 1; j < generef.length; j++){
+                                    generef_value += "," + generef [j];
+                                }
+                                CombinatorAnnotator.info_fields_map.put("GNAME", generef_value);
+                            }
                         }
                         // Para el resto de campos cuyos valores empiecen por comillas:
                         else {
