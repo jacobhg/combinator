@@ -374,7 +374,7 @@ public class CombinatorANNOVAR {
                             if (annovar_value.startsWith("dist")){
                                 String[] details = annovar_value.split(";");
                                 for (int j = 0; j < details.length; j++){
-                                    CombinatorAnnotator.info_fields_map.put("DETAILS" + (j+1), details[j].split("=")[1]);
+                                    CombinatorAnnotator.info_fields_map.put("DETAIL" + (j+1), details[j].split("=")[1]);
                                 }
                             }
                             // Añadido el 8/1/2015: 
