@@ -364,8 +364,8 @@ public class CombinatorANNOVAR {
         for (int i = 0; i < annovar_headers.length; i++){
             // Si el campo se encuentra dentro de la lista de campos que nos interesan:
             if (indexOfAnnovarField(annovar_headers[i]) >= 0){
-                // Comprobamos si existe un valor para ese campo y así evitamos insertar en el map campos que tengan 
-                // valores perdidos (los valores perdidos en el fichero ANNOVAR se representan por el símbolo "", "." o comillas dobles):
+                // Comprobamos si existe un valor para ese campo y así evitamos insertar en el map campos que tengan valores 
+                // perdidos (los valores perdidos en el fichero ANNOVAR se representan por el símbolo "", "." o comillas dobles):
                 if (!((annovar_fields[i].equals("")) || (annovar_fields[i].equals(".")) || (annovar_fields[i].equals("\"\"")))){
                     if (annovar_fields[i].startsWith("\"")){
                         String annovar_value = annovar_fields[i].substring(1, (annovar_fields[i].length() -1));
