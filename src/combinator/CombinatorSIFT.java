@@ -16,7 +16,7 @@ import java.util.TreeMap;
  * CombinatorVcf y otro obtenido del anotador SIFT, nos devuelva un fichero de salida en el que tendremos las líneas del      *
  * fichero .vcf pero en el campo INFO se habrán añadido los campos de interés del fichero SIFT; También se añaden las líneas  *
  * de cabecera correspondientes a los campos que se encuentran en el fichero SIFT.                                            *
- *                                                                                                                           *
+ *                                                                                                                            *
  * @author Jacob Henríquez
  */
 public class CombinatorSIFT {
